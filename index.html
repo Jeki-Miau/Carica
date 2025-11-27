@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather Masterpiece — Cosmic Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/weather.png" type="image/png">
+</head>
+<body class="min-h-screen text-white relative">
+
+<div id="main-content" class="container mx-auto px-4 pt-20 pb-8 max-w-4xl opacity-0">
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-3">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="text-lg font-bold">
+        <span class="text-indigo-300">C</span>
+        <span class="text-blue-300">a</span>
+        <span class="text-cyan-300">r</span>
+        <span class="text-green-300">i</span>
+        <span class="text-yellow-300">C</span>
+        <span class="text-orange-300">a</span>
+      </div>
+
+      <div class="flex items-center space-x-6 text-sm">
+        <a href="#" class="nav-link font-medium text-white hover:text-indigo-300 transition relative">Home</a>
+        <a href="#about" class="nav-link font-medium text-white hover:text-emerald-300 transition">About</a>
+        <a href="#support" class="nav-link font-medium text-white hover:text-purple-300 transition">Support</a>
+
+        <button id="lang-toggle" class="text-white hover:text-cyan-300 transition rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold bg-white/10">
+          ID
+        </button>
+      </div>
+    </div>
+  </nav>
+  <canvas id="cosmic-bg" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <section class="glass rounded-2xl p-6">
+      <h1 class="text-2xl font-bold mb-2">🌤️ Weather Masterpiece</h1>
+      <p class="text-slate-300 text-sm mb-4">Powered by WeatherAPI.com — fast & reliable!</p>
+
+      <div class="flex gap-2 mb-3">
+        <input
+          id="cityInput"
+          class="flex-1 px-4 py-2 rounded-lg bg-transparent border border-white/10 text-white placeholder:text-slate-400 outline-none"
+          placeholder="Jakarta, Tokyo, London..."
+        />
+        <button id="searchBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium">
+          Search
+        </button>
+      </div>
+
+      <button id="geoBtn" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 rounded-lg mb-4">
+        Use My Location
+      </button>
+
+      <div id="hint" class="text-slate-300 text-sm">
+        Enter a city name, then press <strong>Search</strong>.
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-6">
+      <div id="card" class="opacity-0">
+        <div class="flex justify-between items-start">
+          <div>`
+            <h2 id="location" class="text-xl font-bold">—</h2>
+            <p id="desc" class="text-slate-300 text-sm">—</p>
+          </div>
+          <div class="text-right">
+            <div id="temp" class="text-5xl font-extrabold">--°</div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex items-center gap-4">
+          <img id="weatherIcon" src="" alt="Weather" class="w-20 h-20" crossorigin="anonymous" />
+
+          <div class="grid grid-cols-2 gap-2 text-sm text-slate-300 flex-1">
+            <div data-label="wind">Wind: <span id="wind">—</span></div>
+            <div data-label="humidity">Humidity: <span id="hum">—</span></div>
+            <div data-label="pressure">Pressure: <span id="press">—</span></div>
+            <div data-label="feelsLike">Feels like: <span id="feels">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loading" class="hidden text-center py-8">
+        <div class="inline-block h-6 w-6 animate-spin rounded-full border-2 border-white border-r-transparent"></div>
+      </div>
+
+      <div id="error" class="hidden text-center py-4 text-red-300"></div>
+    </section>
+  </div>
+
+  <section id="about" class="mb-8 glass rounded-2xl p-6 opacity-0">
+    <h2 class="text-2xl font-bold mb-4 text-indigo-200">ℹ️ About This Web</h2>
+    <p class="text-slate-300 mb-3">
+      This is a weather web application created exclusively for my <strong>Final Project</strong> in web development class.
+    </p>
+    <p class="text-slate-300">
+      Built with <strong>WeatherAPI.com</strong> for real-time data, <strong>Tailwind CSS</strong> for responsive design, and <strong>Anime.js</strong> for smooth animations.
+    </p>
+    <div class="mt-4 pt-4 border-t border-white/10">
+      <p class="text-sm text-slate-400">
+        🛠️ Developed by: <strong>JekiJek</strong> (Just an Artist)
+      </p>
+    </div>
+  </section>
+
+  <section id="how-to" class="mb-8 glass rounded-2xl p-6 opacity-0">
+    <h2 class="text-2xl font-bold mb-4 text-emerald-200">❓ How to Use</h2>
+    <ul class="list-disc pl-5 text-slate-300 space-y-2">
+      <li>Enter a city name (e.g., <code class="bg-black/30 px-1 rounded">Jakarta</code>) and click <strong>Search</strong>.</li>
+      <li>Click <strong>"Use My Location"</strong> for automatic detection (allow location access).</li>
+      <li>Weather data will appear instantly — including temperature, humidity, and weather icon.</li>
+      <li>The background features animated meteors and stars that move continuously!</li>
+    </ul>
+  </section>
+
+  <section id="support" class="mb-8 glass rounded-2xl p-6 opacity-0">
+    <h2 class="text-2xl font-bold mb-4 text-purple-200">💖 Support Me</h2>
+    <p class="text-slate-300 mb-4">
+      If you enjoy this project, you can support me by:
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="https://saweria.co/JekiMiau" target="_blank" class="block p-4 bg-purple-600 hover:bg-purple-700 rounded-lg transition text-center">
+        <i class="fas fa-hand-holding-heart text-xl mb-2"></i>
+        <p class="font-medium">Donate via Saweria</p>
+        <small class="text-purple-200">Help me buy Coffee 😊</small>
+      </a>
+      <a href="https://www.instagram.com/jeki_miau" target="_blank" class="block p-4 bg-pink-600 hover:bg-pink-700 rounded-lg transition text-center">
+        <i class="fab fa-instagram text-xl mb-2"></i>
+        <p class="font-medium">Follow on Instagram</p>
+        <small class="text-pink-200">See more of my projects!</small>
+      </a>
+      <a href="https://github.com/Jeki-Miau" target="_blank" class="block p-4 bg-gray-600 hover:bg-gray-700 rounded-lg transition text-center">
+        <i class="fab fa-github text-xl mb-2"></i>
+        <p class="font-medium">Star on GitHub</p>
+        <small class="text-gray-200">View the source code!</small>
+      </a>
+      <a href="https://www.behance.net/dzakyabdilllah" target="_blank" class="block p-4 bg-blue-600 hover:bg-blue-700 rounded-lg transition text-center">
+        <i class="fab fa-behance text-xl mb-2"></i>
+        <p class="font-medium">Connect on Behance</p>
+        <small class="text-blue-200">View My Other Work!</small>
+      </a>
+    </div>
+    <div class="mt-6 pt-4 border-t border-white/10 text-center">
+      <p class="text-sm text-slate-400">Thank you for your support! ❤️</p>
+    </div>
+  </section>
+</div>
+
+<div id="loading-screen" class="fixed inset-0 bg-slate-900 z-60 flex flex-col items-center justify-center transition-opacity duration-700">
+  <div id="cloud-logo" class="mb-6">
+    <svg width="100" height="60" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 30C10 30 4 25 4 18C4 11 10 6 18 6C20 2 26 0 32 2C38 4 42 8 44 14C52 12 60 16 60 24C60 32 52 38 44 38H18V30Z" fill="url(#cloudGradient)" />
+      <defs>
+        <linearGradient id="cloudGradient" x1="4" y1="6" x2="60" y2="38" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6a11cb" />
+          <stop offset="1" stop-color="#2575fc" />
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <h1 class="text-3xl md:text-4xl font-bold text-center px-4">
+    <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-400">
+      CariCa<br>
+      Cari Cuaca 
+    </span>
+  </h1>
+
+  <div class="flex space-x-1 mt-6">
+    <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"></div>
+    <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+    <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
